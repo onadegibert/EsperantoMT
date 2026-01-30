@@ -34,7 +34,7 @@ model_dir = "models/{}".format(modelname)
 src_file = "data/test.{}".format(SRC_LANG)
 tgt_file = "data/test.{}".format(TGT_LANG)
 hyp_file = "models/{}/{}.translation.out".format(modelname,langpair)
-os.mkdir(model_dir)
+os.makedirs(model_dir, exist_ok=True)  # succeeds even if directory exists.
 
 # Load tokenizer and model
 tokenizer = AutoTokenizer.from_pretrained(
@@ -98,7 +98,7 @@ print(f"SacreBLEU score: {bleu_results['score']:.2f}")
 print(f"ChrF++ score: {chrf_results['score']:.2f}")
 
 # Path for the results file
-results_file = "models/{}/{}.results".format(model, langpair)
+results_file = "models/{}/{}.results".format(modelname, langpair)
 
 # Write results to file
 with open(results_file, "w", encoding="utf-8") as f:
