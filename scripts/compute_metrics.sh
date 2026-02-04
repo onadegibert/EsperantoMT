@@ -16,4 +16,14 @@ export HUGGINGFACE_HUB_CACHE=".hf_cache"
 module load python-data
 source ../venv/bin/activate
 
-python scripts/compute_metrics.py 
+#TODO remove * from Apertium
+# Ensure MetricX is in your PYTHONPATH
+export PYTHONPATH=$PYTHONPATH:$(pwd)/../metricx
+
+#python scripts/compute_metrics_1.py
+
+export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+
+bash scripts/compute_metricx.sh
+
+python scripts/compute_metrics_2.py
