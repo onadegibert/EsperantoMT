@@ -1,0 +1,24 @@
+# Model Architecture
+type: transformer           # Defines the model type as a Transformer
+task: transformer-base      # Specifies the training task; uses a base Transformer architecture
+dim-vocabs: [32000, 32000]  # Vocabulary size for source and target languages (32K tokens each)
+
+# Training
+seed: 1111                  # Random seed for reproducibility
+shuffle: batches            # Shuffle training data at the batch level for randomness
+lr-report: true             # Reports the learning rate at each step
+
+# Validation
+valid-metrics:
+    - perplexity            # Measures how well the model predicts the next word (lower is better)
+    - chrf                  # chrF score: a character-level F-score metric for translation quality
+    - bleu                  # BLEU score: measures translation quality by comparing to reference translations
+valid-freq: 2500            # Run validation every 2500 training updates
+early-stopping: 10          # Stops training if validation score doesn't improve for 10 evaluations
+keep-best: true             # Save only the best models (based on validation score)
+disp-first: 10              # Show the first 10 examples in logs for inspection
+disp-label-counts: true     # Display label counts in logs (useful for debugging class imbalances)
+
+# Subword Tokenization
+sentencepiece-alphas: 0.1   # Sampling temperature for SentencePiece subword segmentation (data augmentation)
+allow-unk: true

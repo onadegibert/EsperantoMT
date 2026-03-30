@@ -1,0 +1,56 @@
+# https://github.com/browsermt/students/tree/master/train-student/models/student.tiny11
+
+# Model config
+dec-cell: gru
+dec-cell-base-depth: 2
+dec-cell-high-depth: 1
+dec-depth: 2
+dim-emb: 256
+dim-vocabs: [32000, 32000]
+enc-cell-depth: 1
+enc-cell: gru
+enc-depth: 6
+enc-type: bidirectional
+tied-embeddings-all: true
+transformer-dim-ffn: 1536
+transformer-ffn-activation: relu
+transformer-ffn-depth: 2
+transformer-guided-alignment-layer: last
+transformer-heads: 8
+transformer-no-projection: false
+transformer-postprocess-emb: d
+transformer-postprocess: dan
+transformer-preprocess: ""
+transformer-tied-layers: []
+transformer-train-position-embeddings: false
+type: transformer
+beam-size: 1
+clip-norm: 0
+cost-type: ce-mean-words
+disp-freq: 1000
+exponential-smoothing: True
+learn-rate: 0.0003
+lr-decay-inv-sqrt: 32000
+lr-report: True
+lr-warmup: 16000
+seed: 1111                  # Random seed for reproducibility
+shuffle: batches            # Shuffle training data at the batch level for randomness
+
+# Validation
+valid-metrics:
+    - perplexity            # Measures how well the model predicts the next word (lower is better)
+    - chrf                  # chrF score: a character-level F-score metric for translation quality
+    - bleu                  # BLEU score: measures translation quality by comparing to reference translations
+valid-freq: 2500            # Run validation every 2500 training updates
+early-stopping: 10          # Stops training if validation score doesn't improve for 10 evaluations
+keep-best: true             # Save only the best models (based on validation score)
+disp-first: 10              # Show the first 10 examples in logs for inspection
+disp-label-counts: true     # Display label counts in logs (useful for debugging class imbalances)
+
+# Subword Tokenization
+sentencepiece-alphas: 0.1   # Sampling temperature for SentencePiece subword segmentation (data augmentation)
+allow-unk: true
+mini-batch-fit: True
+normalize: 1
+optimizer-delay: 2
+optimizer-params: [0.9, 0.98, 1e-09]

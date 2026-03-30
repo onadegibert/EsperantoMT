@@ -1,0 +1,61 @@
+common:
+    output_directory: data/
+
+steps:
+    - type: concatenate
+      parameters:
+            inputs:
+                - raw/hplt/HPLT.en-eo.en.gz
+                - raw/tatoeba/train.src.gz
+            output: raw/concat.en.gz
+    - type: concatenate
+      parameters:
+            inputs:
+                - raw/hplt/HPLT.en-eo.eo.gz
+                - raw/tatoeba/train.trg.gz
+            output: raw/concat.eo.gz
+    - type: remove_duplicates 
+      parameters:
+            inputs:
+                - raw/concat.en.gz
+                - raw/concat.eo.gz
+            outputs:
+                - raw/dedup.en.gz
+                - raw/dedup.eo.gz
+    - type: filter
+      parameters:
+            inputs:
+                - raw/dedup.en.gz
+                - raw/dedup.eo.gz
+            outputs:
+                - clean/train.en.gz
+                - clean/train.eo.gz
+            filters:
+                - LengthFilter:
+                    unit: word
+                    min_length: 3
+                    max_length: 100
+                - LengthRatioFilter:
+                    unit: word
+                    threshold: 2
+                - LongWordFilter:
+                    threshold: 40
+                - HtmlTagFilter: {}
+                - CharacterScoreFilter:
+                    scripts:
+                        - Latin
+                        - Latin
+                    thresholds:
+                        - 1
+                        - 1
+                - TerminalPunctuationFilter:
+                    threshold: -2
+                - NonZeroNumeralsFilter:
+                    threshold: 0.5
+                - LanguageIDFilter:
+                    languages:
+                        - en
+                        - eo
+                    thresholds:
+                        - 0.9
+                        - 0.9

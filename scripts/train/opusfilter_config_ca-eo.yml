@@ -1,0 +1,49 @@
+common:
+    output_directory: data/ca-eo
+
+steps:
+    - type: remove_duplicates 
+      parameters:
+            inputs:
+                - raw/train.ca.gz
+                - raw/train.eo.gz
+            outputs:
+                - raw/dedup.ca.gz
+                - raw/dedup.eo.gz
+    - type: filter
+      parameters:
+            inputs:
+                - raw/dedup.ca.gz
+                - raw/dedup.eo.gz
+            outputs:
+                - clean/train.ca.gz
+                - clean/train.eo.gz
+            filters:
+                - LengthFilter:
+                    unit: word
+                    min_length: 3
+                    max_length: 100
+                - LengthRatioFilter:
+                    unit: word
+                    threshold: 2
+                - LongWordFilter:
+                    threshold: 40
+                - HtmlTagFilter: {}
+                - CharacterScoreFilter:
+                    scripts:
+                        - Latin
+                        - Latin
+                    thresholds:
+                        - 1
+                        - 1
+                - TerminalPunctuationFilter:
+                    threshold: -2
+                - NonZeroNumeralsFilter:
+                    threshold: 0.5
+                - LanguageIDFilter:
+                    languages:
+                        - ca
+                        - eo
+                    thresholds:
+                        - 0.9
+                        - 0.9
